@@ -1,0 +1,21 @@
+{
+	"flTweetsEnabled": true, 
+	"urlTwitterGateway": "http://twitter2.radio3.io:5342/",
+	"flAtMostOneTweetPerMinute": true,
+	"rivers": [
+		{
+			"name": "nyt",
+			"enabled": true,
+			"urlRiver": "http://rss4.scripting.com/rivers/nytRiver.js",
+			"token": "xyz",
+			"tokenSecret": "xyz"
+			},
+		{
+			"name": "nba",
+			"enabled": true,
+			"urlRiver": "http://rss4.scripting.com/rivers/nba.js",
+			"token": "xyz",
+			"tokenSecret": "xyz"
+			}
+		]
+	}
