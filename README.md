@@ -14,6 +14,8 @@ I wanted to show people how to parse a river, and keep track of which items you'
 
 It might be too much work to set up your own <a href="https://github.com/scripting/nodeStorage">nodeStorage</a> server. Feel free to substitute any code of your own to send a message. You could send an email, or a WhatsApp message, or whatever. 
 
+You can use my Twitter gateway if you want, as long as you're not sending hundreds of tweets a day.
+
 It might be easier to understand the code <a href="http://scripting.com/listings/rivertotweets.html">reading in an outliner</a>. 
 
 ### Setup
@@ -22,7 +24,7 @@ It might be easier to understand the code <a href="http://scripting.com/listings
 
 2. Edit config.json. For each river, give it a name. The name must be unique among the other rivers in config.json. 
 
-3. You can use my Twitter gateway if you want, as long as you're not sending hundreds of tweets a day. If you want to set up your own, it's running nodeStorage. 
+3. If you're running your own nodeStorage server, substitute the address of your server for mine. (If so, the values of token and tokenSecret will come from your nodeStorage installation, not mine.)
 
 4. The token and tokenSecret are the values used in Radio3 (which is the domain the gateway is serving).
 
