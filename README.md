@@ -4,7 +4,7 @@ A JavaScript app that reads any number of "river" files and streams them as post
 
 ### Who is this for?
 
-This is intended primarily for River4 users.
+This is intended primarily for <a href="https://github.com/scripting/river4">River4</a> users.
 
 The instructions are brief. ;-)
 
@@ -12,7 +12,9 @@ The instructions are brief. ;-)
 
 I wanted to show people how to parse a river, and keep track of which items you've seen, and to stream them out to a service like Twitter.
 
-It might be too much work to set up your own nodeStorage server. Feel free to substitute any code of your own to send a message. You could send an email, or a WhatsApp message. 
+It might be too much work to set up your own <a href="https://github.com/scripting/nodeStorage">nodeStorage</a> server. Feel free to substitute any code of your own to send a message. You could send an email, or a WhatsApp message, or whatever. 
+
+It might be easier to understand the code <a href="http://scripting.com/listings/rivertotweets.html">reading in an outliner</a>. 
 
 ### Setup
 
