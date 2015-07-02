@@ -2,7 +2,7 @@ var myVersion = "0.48", myProductName = "River to Tweets";
  
 	//The MIT License (MIT)
 	
-	//Copyright (c) 2014 Dave Winer
+	//Copyright (c) 2015 Dave Winer
 	
 	//Permission is hereby granted, free of charge, to any person obtaining a copy
 	//of this software and associated documentation files (the "Software"), to deal
