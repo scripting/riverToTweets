@@ -1,13 +1,14 @@
 {
 	"name": "riverToTweets",
-	"description": "A JavaScript app that reads any number of "river" files and streams them as posts to Twitter.",
+	"description": "A JavaScript app that reads any number of \"river\" files and streams them as posts to Twitter.",
 	"author": "Dave Winer <dave@smallpicture.com>",
-	"version": "0.0.47",
+	"version": "0.5.0",
 	"scripts": {
 		"start": "node rivertotweets.js"
 		},
 	"dependencies" : {
-		"request": "*"
+		"request": "*",
+		"daveutils": "*"
 		}, 
 	"license": "MIT",
 	"engines": {

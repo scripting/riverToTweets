@@ -1,4 +1,4 @@
-var myVersion = "0.48", myProductName = "River to Tweets";
+var myVersion = "0.5.0", myProductName = "riverToTweets";
  
 	//The MIT License (MIT)
 	
@@ -24,8 +24,9 @@ var myVersion = "0.48", myProductName = "River to Tweets";
 	
 	//structured listing: http://scripting.com/listings/rivertotweets.html
 	
-var fs = require ("fs");
-var request = require ("request");
+const fs = require ("fs");
+const request = require ("request");
+const utils = require ("daveutils");
 
 var riverStats = { 
 	ctStarts: 0, whenLastStart: new Date (0),
@@ -34,10 +35,8 @@ var riverStats = {
 	};
 var flStatsChanged = false;
 var riverConfig;
-var flScheduledEveryMinute = false;
 
-
-function statsChanged () {
+function statsChanged () { 
 	flStatsChanged = true;
 	}
 function httpReadUrl (url, callback) {
@@ -50,26 +49,13 @@ function httpReadUrl (url, callback) {
 			}
 		});
 	}
-function stringDelete (s, ix, ct) {
-	var start = ix - 1;
-	var end = (ix + ct) - 1;
-	var s1 = s.substr (0, start);
-	var s2 = s.substr (end);
-	return (s1 + s2);
-	}
-function stringMid (s, ix, len) { 
-	return (s.substr (ix-1, len));
-	}
-function jsonStringify (jstruct) { 
-	return (JSON.stringify (jstruct, undefined, 4));
-	}
 function readConfig (callback) {
 	fs.readFile ("config.json", "utf8", function (err, data) {
 		var dataAboutRead = {
 			Body: data
 			};
 		if (err) {
-			console.log ("readConfig: error == " + jsonStringify (err));
+			console.log ("readConfig: error == " + utils.jsonStringify (err));
 			}
 		else {
 			riverConfig = JSON.parse (dataAboutRead.Body);
@@ -102,9 +88,24 @@ function readStats (callback) {
 		});
 	}
 function writeStats () {
-	fs.writeFile ("stats.json", jsonStringify (riverStats));
+	fs.writeFile ("stats.json", utils.jsonStringify (riverStats), function (err) {
+		});
 	}
 function checkOneRiver (theConfig, callback) {
+	function sendTweet (s, callback) {
+		if (riverConfig.flTweetsEnabled) {
+			var inReplyToId = 0;
+			function encode (s) {
+				return (encodeURIComponent (s));
+				}
+			var apiUrl = riverConfig.urlTwitterGateway + "tweet?oauth_token=" + encode (theConfig.token) + "&oauth_token_secret=" + encode (theConfig.tokenSecret) + "&status=" + encode (s) + "&in_reply_to_status_id=" + encode (inReplyToId);
+			httpReadUrl (apiUrl, function (s) {
+				if (callback != undefined) {
+					callback ();
+					}
+				});
+			}
+		}
 	if (theConfig.enabled) {
 		var theStats = riverStats.rivers [theConfig.name];
 		if (theStats === undefined) { //cool! a new river
@@ -118,20 +119,6 @@ function checkOneRiver (theConfig, callback) {
 		httpReadUrl (theConfig.urlRiver, function (s) {
 			if (s !== undefined) {
 				try {
-					function sendTweet (s, callback) {
-						if (riverConfig.flTweetsEnabled) {
-							var inReplyToId = 0;
-							function encode (s) {
-								return (encodeURIComponent (s));
-								}
-							var apiUrl = riverConfig.urlTwitterGateway + "tweet?oauth_token=" + encode (theConfig.token) + "&oauth_token_secret=" + encode (theConfig.tokenSecret) + "&status=" + encode (s) + "&in_reply_to_status_id=" + encode (inReplyToId);
-							httpReadUrl (apiUrl, function (s) {
-								if (callback != undefined) {
-									callback ();
-									}
-								});
-							}
-						}
 					var now = new Date (), prefix = "onGetRiverStream (", idsStruct = {}, flNoTweetsSentYet = true;
 					//stats
 						riverStats.ctReads++;
@@ -140,8 +127,8 @@ function checkOneRiver (theConfig, callback) {
 					for (var x in theStats.idsSeen) { //create idsStruct -- at the end it will contain ids that are in the array, but not in the river
 						idsStruct [x] = true;
 						}
-					s = stringDelete (s, 1, prefix.length);
-					s = stringMid (s, 1, s.length - 1); //pop off right paren at end
+					s = utils.stringDelete (s, 1, prefix.length);
+					s = utils.stringMid (s, 1, s.length - 1); //pop off right paren at end
 					var jstruct = JSON.parse (s);
 					var feeds = jstruct.updatedFeeds.updatedFeed;
 					for (var i = 0; i < feeds.length; i++) {
@@ -230,19 +217,14 @@ function checkAllRivers (callback) {
 function everyMinute () { 
 	var now = new Date ();
 	console.log ("\neveryMinute: " + now.toLocaleTimeString ());
-	checkAllRivers (function () {
-		statsChanged ();
+	readConfig (function () {
+		checkAllRivers (function () {
+			statsChanged ();
+			});
 		});
 	}
 function everySecond () {
 	var now = new Date ();
-	if (!flScheduledEveryMinute) {
-		if (now.getSeconds () == 0) {
-			setInterval (everyMinute, 60000); 
-			flScheduledEveryMinute = true;
-			everyMinute (); 
-			}
-		}
 	if (flStatsChanged) {
 		flStatsChanged = false;
 		writeStats ();
@@ -257,6 +239,10 @@ function startup () {
 			console.log ("\n" + myProductName + " v" + myVersion + ", using " + riverConfig.urlTwitterGateway);
 			everyMinute (); //do one check to get started
 			setInterval (everySecond, 1000); 
+			utils.runAtTopOfMinute (function () {
+				setInterval (everyMinute, 60000); 
+				everyMinute ();
+				});
 			});
 		});
 	}
