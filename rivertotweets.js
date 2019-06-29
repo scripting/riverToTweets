@@ -1,4 +1,4 @@
-var myVersion = "0.5.0", myProductName = "riverToTweets";
+var myVersion = "0.5.2", myProductName = "riverToTweets";
  
 	//The MIT License (MIT)
 	
@@ -93,6 +93,8 @@ function writeStats () {
 	}
 function checkOneRiver (theConfig, callback) {
 	function sendTweet (s, callback) {
+		s = utils.decodeXml (s); //7/5/18 by DW
+		s = utils.replaceAll (s, "&rsquo;", "'"); //7/5/18 by DW
 		if (riverConfig.flTweetsEnabled) {
 			var inReplyToId = 0;
 			function encode (s) {
