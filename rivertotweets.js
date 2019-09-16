@@ -1,4 +1,4 @@
-var myVersion = "0.5.2", myProductName = "riverToTweets";
+var myVersion = "0.5.3", myProductName = "riverToTweets";
  
 	//The MIT License (MIT)
 	
@@ -45,6 +45,16 @@ function httpReadUrl (url, callback) {
 			callback (body) 
 			}
 		else { //6/24/15 by DW
+			
+			try {
+				var jstruct = JSON.parse (response.body);
+				var data = JSON.parse (jstruct.data);
+				console.log ("httpReadUrl: Twitter says == " + data.errors [0].message);
+				}
+			catch (err) {
+				}
+			
+			
 			callback (undefined) 
 			}
 		});
