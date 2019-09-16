@@ -1,4 +1,4 @@
-var myVersion = "0.5.3", myProductName = "riverToTweets";
+var myVersion = "0.5.3", myProductName = "riverToTweets"; 
  
 	//The MIT License (MIT)
 	
