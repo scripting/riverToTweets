@@ -128,11 +128,11 @@ function checkOneRiver (theConfig, callback) {
 				}
 			return ("");
 			}
-		console.log ("sendTweet: item == " + utils.jsonStringify (item));
 		if (riverConfig.flTweetsEnabled) {
 			var s = item.title + ". " + getlink (item);
 			s = utils.decodeXml (s); //7/5/18 by DW
 			s = utils.replaceAll (s, "&rsquo;", "'"); //7/5/18 by DW
+			console.log ("sendTweet @" +  theConfig.name + ": " + s); //10/6/19 by DW
 			var inReplyToId = 0;
 			function encode (s) {
 				return (encodeURIComponent (s));
@@ -196,7 +196,6 @@ function checkOneRiver (theConfig, callback) {
 										theStats.whenLastStory = now;
 										statsChanged ();
 										if (!flTitleInArray) { //avoid literal duplicates
-											console.log (theConfig.name + ": " + item.title);
 											sendTweet (item);
 											flNoTweetsSentYet = false; //11/22/14 by DW
 											}
@@ -279,7 +278,7 @@ readConfig (function () {
 		riverStats.ctStarts++;
 		riverStats.whenLastStart = new Date ();
 		statsChanged ();
-		console.log ("\n" + myProductName + " v" + myVersion + ", using " + riverConfig.urlTwitterGateway);
+		console.log ("\n" + myProductName + " v" + myVersion + ", " + riverStats.whenLastStart.toLocaleString () + ", using " + riverConfig.urlTwitterGateway);
 		checkAllRivers (); //do one check to get started
 		setInterval (everySecond, 1000); 
 		utils.runEveryMinute (everyMinute);
